@@ -111,7 +111,17 @@
                   variant="text"
                   to="/about"
                 >
-                  Configurações
+                  Gerenciamento
+                </v-btn>
+              </div>
+              <div v-else>
+                <v-divider class="my-3"></v-divider>
+                <v-btn
+                  rounded
+                  variant="text"
+                  to="/about"
+                >
+                  Minha conta
                 </v-btn>
               </div>
               <v-divider class="my-3"></v-divider>
@@ -268,9 +278,7 @@ export default {
         role: this.registering.role
       })
 
-      // this.rightDrawer = !this.rightDrawer
       this.notRegister = !this.notRegister
-      // this.logged = !this.logged
     },
     async roleList(){
       let obj = {
