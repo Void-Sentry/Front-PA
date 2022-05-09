@@ -11,6 +11,7 @@
                 <v-list-item
                   v-for="(item, i) in items"
                   :key="i"
+                  :to="item.to"
                 >
                   <v-list-item-icon>
                     <v-icon v-text="item.icon"></v-icon>
@@ -70,14 +71,15 @@
 
 <script>
   export default {
-    name: 'Sobre',
+    name: 'Gerenciamento',
     data: () => ({
       selectedItem: 1,
       items: [
-        { text: 'Perfil', icon: 'mdi-account' },
-        { text: 'Audience', icon: 'mdi-clock' },
-        { text: 'Conversions', icon: 'mdi-flag' },
+        { text: 'Perfil', icon: 'mdi-account-details' },
+        { text: 'Usuários', icon: 'mdi-account-group' },
+        { text: 'Estatística', icon: 'mdi-chart-bar' },
+        { text: 'Voltar', icon: 'mdi-close', to: '/' },
       ],
-    }),
+    })
   }
 </script>
