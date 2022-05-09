@@ -23,7 +23,8 @@
             @click.stop="rightDrawer = !rightDrawer"
           >
             <v-avatar>
-              <v-icon>mdi-account-circle</v-icon>
+              <v-icon v-if="logged">mdi-account-circle</v-icon>
+              <v-icon v-else>mdi-login-variant</v-icon>
             </v-avatar>
           </v-btn>  
         </template>
@@ -85,6 +86,7 @@
                   rounded
                   variant="text"
                   to="/about"
+                  @click.stop="rightDrawer = !rightDrawer"
                 >
                   Gerenciamento
                 </v-btn>

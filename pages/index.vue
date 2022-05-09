@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-parallax
-      height="300"
       src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pixelstalk.net%2Fwp-content%2Fuploads%2F2016%2F03%2FDark-wallpaper-Veins-Detail.jpg&f=1&nofb=1"
     >
       <div class="d-flex flex-column fill-height justify-center align-center text-white">
@@ -13,6 +12,30 @@
         </h4>
       </div>
     </v-parallax>
+
+    <v-row class="justify-center">
+      <v-col cols="3">
+        <v-autocomplete
+          v-model="input"
+          :items="notices"
+          :search-input.sync="search"
+          color="white"
+          hide-no-data
+          hide-selected
+          item-text="title"
+          item-value="id"
+          label="Ache notícias do seu interesse!"
+          prepend-icon="mdi-magnify"
+          return-object
+        ></v-autocomplete>
+      </v-col>
+    </v-row>
+      
+    <v-row class="justify-center">
+      <div v-for="index in categories" :key="index.id">
+        <v-chip>{{ index.name }}</v-chip>
+      </div>
+    </v-row>
     
     <v-row>
       <v-col v-for="item in notices" :key="item.id">
@@ -70,7 +93,10 @@ export default {
     return {
       notices: [],
       open: false,
-      object: null
+      object: null,
+      categories: null,
+      input: null,
+      search: null
     };
   },
   methods: {
@@ -80,7 +106,14 @@ export default {
           arr.show = false;
           return arr;
         });
+      }).finally(() => {
+        sessionStorage.setItem('arrayNoticias', JSON.stringify(this.notices))
       });
+    },
+    async getCategories(){
+      await this.$axios.get('status').then(res => {
+        this.categories = res.data
+      })
     },
     openning(value){
       console.log(value)
@@ -90,6 +123,7 @@ export default {
   },
   mounted() {
     this.getNotices();
+    this.getCategories();
   },
 };
 </script>

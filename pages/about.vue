@@ -32,10 +32,10 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field label="Nome completo"></v-text-field>
+                <v-text-field v-model="name" label="Nome" readonly></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field label="Email"></v-text-field>
+                <v-text-field v-model="email" label="Email" readonly></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -74,12 +74,18 @@
     name: 'Gerenciamento',
     data: () => ({
       selectedItem: 1,
+      name: null,
+      email: null,
       items: [
         { text: 'Perfil', icon: 'mdi-account-details' },
         { text: 'Usuários', icon: 'mdi-account-group' },
         { text: 'Estatística', icon: 'mdi-chart-bar' },
         { text: 'Voltar', icon: 'mdi-close', to: '/' },
       ],
-    })
+    }),
+    mounted(){
+      this.name = sessionStorage.getItem('user_name')
+      this.email = sessionStorage.getItem('user_email')
+    }
   }
 </script>
