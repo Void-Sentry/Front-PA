@@ -116,7 +116,6 @@ export default {
       })
     },
     openning(value){
-      console.log(value)
       this.open = !this.open
       this.object = value
     }
