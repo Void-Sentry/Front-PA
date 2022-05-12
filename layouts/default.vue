@@ -8,6 +8,9 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       
+      <v-btn icon v-if="logged && role === 'reporter'">
+        <v-icon>mdi-pencil-plus</v-icon>
+      </v-btn>
       <!-- Avatar do usuário -->
       <v-menu
         v-model="rightDrawer"
