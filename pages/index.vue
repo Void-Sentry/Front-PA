@@ -22,6 +22,8 @@
           color="white"
           hide-no-data
           hide-selected
+          clearable
+          @change="openning"
           item-text="title"
           item-value="id"
           label="Ache notícias do seu interesse!"
@@ -34,6 +36,10 @@
     <v-row class="justify-center">
       <div v-for="index in categories" :key="index.id">
         <v-chip>{{ index.name }}</v-chip>
+      </div>
+      <v-btn icon @click.stop="openStatusCreator = !openStatusCreator"><v-icon>mdi-plus</v-icon></v-btn>
+      <div v-if="openStatusCreator">
+        <create-status @closeStatusCreator="openStatusCreator = !openStatusCreator"></create-status>
       </div>
     </v-row>
     
@@ -51,6 +57,9 @@
           <v-card-actions>
             <v-btn color="orange-lighten-2" variant="text" @click="openning(item)">
               Explore
+            </v-btn>
+            <v-btn v-if="item.user_id === user_id" color="orange-lighten-2" variant="text" @click.stop="edit(item)">
+              Editar
             </v-btn>
 
             <v-spacer></v-spacer>
@@ -72,31 +81,43 @@
             </div>
           </v-expand-transition>
         </v-card>
-
-        <div v-if="open">
-          <open-modal @closeModal="open = !open" :data="object"></open-modal>
-        </div>
       </v-col>
+      <div v-if="openShow">
+        <show-modal @closeModal="openShow = !openShow" :data="object"></show-modal>
+      </div>
+      <div v-if="openEdit">
+        <edit-modal @closeEdit="openEdit = !openEdit" @destroyNotice="getNotices" :data="object"></edit-modal>
+      </div>
     </v-row>
 </div>
 </template>
 
 <script>
-import openModal from "@/components/show.vue";
+// Notice manager
+import showModal from "~/components/notice/show.vue";
+import editModal from "~/components/notice/edit.vue";
+
+// Status manager
+import createStatus from "~/components/status/create.vue";
 
 export default {
   name: "Index",
   components: {
-    openModal,
+    showModal,
+    editModal,
+    createStatus
   },
   data() {
     return {
       notices: [],
-      open: false,
+      openEdit: false,
+      openShow: false,
       object: null,
       categories: null,
       input: null,
-      search: null
+      search: null,
+      user_id: null,
+      openStatusCreator: false,
     };
   },
   methods: {
@@ -106,9 +127,7 @@ export default {
           arr.show = false;
           return arr;
         });
-      }).finally(() => {
-        sessionStorage.setItem('arrayNoticias', JSON.stringify(this.notices))
-      });
+      })
     },
     async getCategories(){
       await this.$axios.get('status').then(res => {
@@ -116,13 +135,23 @@ export default {
       })
     },
     openning(value){
-      this.open = !this.open
-      this.object = value
+      if(value){
+        this.openShow = !this.openShow
+        this.object = value
+      }
+    },
+    edit(value){
+      if(value){
+        this.openEdit = !this.openEdit
+        this.object = value
+      }
     }
   },
   mounted() {
     this.getNotices();
     this.getCategories();
+    if(sessionStorage.getItem('user_id'))
+      this.user_id = JSON.parse(sessionStorage.getItem('user_id'))
   },
 };
 </script>
