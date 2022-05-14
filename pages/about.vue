@@ -33,6 +33,7 @@
                   v-for="(item, i) in items"
                   :key="i"
                   :to="item.to"
+                  @click.stop="changeViews(item.text)" 
                 >
                   <v-list-item-icon>
                     <v-icon v-text="item.icon"></v-icon>
@@ -44,7 +45,21 @@
               </v-list-item-group>
             </v-list>
         </v-col>
-        <profile />
+        <div v-if="profileView">
+          <profile />
+        </div> 
+        <div v-if="userView">
+          <v-row style="width:70vw;">
+            <v-col>
+              <user />
+            </v-col>
+            <v-col class="justify-end">
+              <v-btn icon>
+                    <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div> 
       </v-row>
     </v-container>
   </v-card>
@@ -52,22 +67,50 @@
 
 <script>
   import profile from '@/components/user/profile.vue'
+  import user from '@/components/user/user.vue'
 
   export default {
     name: 'Gerenciamento',
     components: {
-      profile
+      profile,
+      user
     },
-    data: () => ({
-      selectedItem: 1,
-      user_role: null,
-      items: [
-        { text: 'Perfil', icon: 'mdi-account-details' },
-        { text: 'Usuários', icon: 'mdi-account-group' },
-        { text: 'Estatística', icon: 'mdi-chart-bar' },
-        { text: 'Voltar', icon: 'mdi-close', to: '/' },
-      ],
-    }),
+    data () {
+      return {
+        selectedItem: 1,
+        userView: false,
+        profileView: false,
+        estatiscaView: false,
+        user_role: null,
+        items: [
+          { text: 'Perfil', icon: 'mdi-account-details' },
+          { text: 'Usuários', icon: 'mdi-account-group' },
+          { text: 'Estatística', icon: 'mdi-chart-bar' },
+          { text: 'Voltar', icon: 'mdi-close', to: '/' },
+        ],
+      }  
+    },
+    methods: {
+      changeViews(text){
+        switch(text){
+          case 'Perfil':
+            this.profileView = !this.profileView
+            this.userView = false
+            this.estatiscaView = false
+          break
+          case 'Usuários':
+             this.userView = !this.userView
+             this.estatiscaView = false
+             this.profileView = false
+          break
+          case 'Estatística':
+             this.estatiscaView = !this.estatiscaView
+             this.profileView = false
+             this.userView = false 
+          break
+        }
+      }
+    },
     mounted(){
       this.user_role = sessionStorage.getItem('user_role')
     }
