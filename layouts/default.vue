@@ -8,7 +8,7 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       
-      <v-btn icon v-if="logged && role === 'reporter'">
+      <v-btn icon v-if="logged && role === 'reporter'" to="/notice/create">
         <v-icon>mdi-pencil-plus</v-icon>
       </v-btn>
       <!-- Avatar do usuário -->
@@ -171,7 +171,7 @@
       </v-menu>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
+      <v-container fluid :key="index">
         <Nuxt />
       </v-container>
     </v-main>
@@ -195,6 +195,7 @@ export default {
         password: null,
         role: null
       },
+      index: null,
       notRegister: false,
       role: null,
       list: [],
@@ -214,22 +215,24 @@ export default {
   },
   methods: {
     async login(){
-      await this.$axios.$post('login', {
+      await this.$axios.$post('auth/login', {
         email: this.email,
         password: this.password
       }).then(res => {
         sessionStorage.setItem('token', res.access_token)
         sessionStorage.setItem('user_name', res.user.name)
+        sessionStorage.setItem('user_id', res.user.id)
         sessionStorage.setItem('user_role', res.role)
         sessionStorage.setItem('user_email', this.email)
         this.$axios.setToken(res.access_token, 'Bearer')
         this.name = res.user.name
         this.role = res.role
+        this.index++
         this.logged = !this.logged
       })
     },
     async register(){
-      await this.$axios.$post('register', {
+      await this.$axios.$post('auth/register', {
         name: this.registering.name,
         email: this.registering.email,
         password: this.registering.password,
@@ -239,18 +242,16 @@ export default {
       this.notRegister = !this.notRegister
     },
     async roleList(){
-      let obj = {
-        id: null,
-        name: null
-      }
       await this.$axios.$get('role').then(res => {
-        for(let i = 0; i < res.length; i++)
-          this.list[i] = res[i]
+        this.list = res
       })
     },
     async logout(){
       sessionStorage.removeItem('token')
-      await this.$axios.$post('logout')
+      await this.$axios.$post('auth/logout')
+      this.index++
+      sessionStorage.clear()
+      localStorage.clear()
       this.logged = !this.logged
     },
     async setRole(value){
@@ -265,7 +266,8 @@ export default {
       this.email = sessionStorage.getItem('user_email')
       this.logged = !this.logged
     }
-    this.roleList()
+    // if(this.role === 'diretor')
+      this.roleList()
   }
 }
 </script>
