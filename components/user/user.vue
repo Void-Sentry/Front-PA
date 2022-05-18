@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <!-- <div>
         <v-list dense>
             <v-list-item-group
                 color="primary"
@@ -20,20 +20,36 @@
                 </v-btn> 
                 </v-list-item>
             </v-list-item-group>
+            
         </v-list>
-    </div>
+    </div> -->
+    <v-data-table
+        :items="list_user"
+        :headers="headers">
+        <template v-slot:[`item.actions`]='{ item }'>
+            <v-icon
+                @click.stop="edit_user(item)">
+                mdi-account-edit-outline
+            </v-icon>
+            <v-icon
+                @click.stop="delete_user(item)">
+                mdi-delete-forever-outline
+            </v-icon>
+        </template>
+    </v-data-table>
 </template>
 
 <script>
    export default {
        data(){
            return {
-               list_User:[]
+               list_user:[],
+               headers: [ { text: 'Nome', value: 'name', width: '40%' }, { text: 'Email', value: 'email', width: '50%' }, { text: 'Ações', value: 'actions' }  ]
            }
        },
         async mounted(){
             await this.$axios.$get("user").then(response =>{
-                this.list_User=response
+                this.list_user=response
             })
         }     
    } 

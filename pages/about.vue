@@ -2,7 +2,7 @@
   <v-card>
     <v-container>
       <v-row>
-        <v-col cols="2" v-if="user_role === 'diretor'">
+        <v-col cols="2">
             <v-list shaped>
               <v-subheader>Configurações</v-subheader>
               <v-list-item-group
@@ -12,6 +12,7 @@
                   v-for="(item, i) in items"
                   :key="i"
                   :to="item.to"
+                  @click.stop="changeViews(item.text)"
                 >
                   <v-list-item-icon>
                     <v-icon v-text="item.icon"></v-icon>
@@ -23,7 +24,7 @@
               </v-list-item-group>
             </v-list>
         </v-col>
-        <v-col cols="2" v-else>
+        <!-- <v-col cols="2" v-else>
             <v-list shaped>
               <v-subheader>Configurações</v-subheader>
               <v-list-item-group
@@ -44,11 +45,16 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
+        </v-col> -->
+        <v-col>
+          <div v-if="profileView">
+            <profile />
+          </div>
+          <div v-if="userView">
+            <user />
+          </div>
         </v-col>
-        <div v-if="profileView">
-          <profile />
-        </div> 
-        <div v-if="userView">
+        <!-- <div v-if="userView">
           <v-row style="width:70vw;">
             <v-col>
               <user />
@@ -59,7 +65,7 @@
               </v-btn>
             </v-col>
           </v-row>
-        </div> 
+        </div> -->
       </v-row>
     </v-container>
   </v-card>
