@@ -1,55 +1,97 @@
 <template>
-    <!-- <div>
-        <v-list dense>
-            <v-list-item-group
-                color="primary"
-            >
-                <v-subheader>Lista De Usuários</v-subheader>
-                <v-list-item
-                v-for="(item, i) in list_User"
-                :key="i"
-                >
-                <v-list-item-content>
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
-                </v-list-item-content>
-                <v-btn icon>
-                    <v-icon>mdi-delete-forever-outline</v-icon>
-                </v-btn> 
-                <v-btn icon>
-                    <v-icon>mdi-account-edit-outline</v-icon>
-                </v-btn> 
-                </v-list-item>
-            </v-list-item-group>
-            
-        </v-list>
-    </div> -->
-    <v-data-table
-        :items="list_user"
-        :headers="headers">
-        <template v-slot:[`item.actions`]='{ item }'>
-            <v-icon
-                @click.stop="edit_user(item)">
-                mdi-account-edit-outline
-            </v-icon>
-            <v-icon
-                @click.stop="delete_user(item)">
-                mdi-delete-forever-outline
-            </v-icon>
-        </template>
-    </v-data-table>
+    <div>
+        <v-data-table
+            :items="list_user"
+            :headers="headers">
+            <template v-slot:[`item.actions`]='{ item }'>
+                <v-icon
+                    @click.stop="edit_user(item)">
+                    mdi-account-edit-outline
+                </v-icon>
+                <v-icon
+                    @click.stop="delete_user(item)">
+                    mdi-delete-forever-outline
+                </v-icon>
+            </template>
+        </v-data-table> 
+        <div v-if="popup">
+            <v-dialog width="800" v-model="popup" :close-on-content-click="!popup">
+                <v-card min-width="300">
+                    <v-card-text>
+                        <div class="mx-auto text-center">
+                        <h3>Editar Usuário(a)</h3>
+                        <v-divider class="my-3"></v-divider>
+                        <v-text-field
+                            v-model="item.name"
+                            type="text"
+                            name="input-10-2"
+                            label="Nome"
+                        ></v-text-field>
+                        <v-divider class="my-3"></v-divider>
+                        <v-text-field
+                            v-model="item.email"
+                            type="text"
+                            name="input-10-2"
+                            label="Email"
+                        ></v-text-field>
+                        <v-divider class="my-3"></v-divider>
+                        <v-select
+                            :items="listCargos"
+                            item-text="name"
+                            item-value="id"
+                            label="Cargos"
+                            v-model="item.role_id"
+                        ></v-select>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn
+                            rounded
+                            variant="text"
+                            @click.stop="edit"
+                        >
+                            Editar
+                        </v-btn>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+        </div>
+    </div>
+    
 </template>
 
 <script>
    export default {
        data(){
            return {
+               listCargos:null,
+               item:null,
+               popup:false,
                list_user:[],
                headers: [ { text: 'Nome', value: 'name', width: '40%' }, { text: 'Email', value: 'email', width: '50%' }, { text: 'Ações', value: 'actions' }  ]
            }
        },
+        methods: {
+            edit_user(user){
+                this.item=user
+                this.popup=!this.popup
+            },
+            edit(){
+                this.$axios.$put(`user/${this.item.id}`, {
+                    name:this.item.name,
+                    email:this.item.email,
+                    role_id:this.item.role_id
+                })
+            },
+            async delete_user(user){
+                await this.$axios.$delete(`user/${user.id}`)    
+            }
+        },
         async mounted(){
             await this.$axios.$get("user").then(response =>{
                 this.list_user=response
+            })
+            await this.$axios.$get("role").then(response =>{
+                this.listCargos=response
             })
         }     
    } 
