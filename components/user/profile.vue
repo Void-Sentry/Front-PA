@@ -8,18 +8,19 @@
         </v-row>
         <v-row>
             <v-col>
-            <v-text-field v-model="name" label="Nome" readonly></v-text-field>
+            <v-text-field v-model="name" label="Nome"></v-text-field>
             </v-col>
             <v-col>
-            <v-text-field v-model="email" label="Email" readonly></v-text-field>
+            <v-text-field v-model="email" label="Email"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
             <v-col>
-            <v-text-field label="Senha atual"> </v-text-field>
+            <v-text-field v-model="current" label="Senha atual"> </v-text-field>
             </v-col>
             <v-col>
-            <v-text-field
+            <v-text-field 
+                v-model="newpassword"
                 label="Nova senha"
                 required
                 placeholder="Digite a sua nova senha"
@@ -34,10 +35,10 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-btn small>
+            <v-btn small @click.stop="edit_user_prop">
             Salvar alterações
             </v-btn>
-            <v-btn small> Limpar campos </v-btn>
+            <v-btn small > Limpar campos </v-btn>
         </v-row>
     </v-col>
 </template>
@@ -45,8 +46,21 @@
 export default {
     data() {
         return {
+            id: sessionStorage.getItem("user_id"),
+            current: null,
+            newpassword: null,
             name: null,
             email: null
+        }
+    },
+    methods:{
+        async edit_user_prop(){
+            await this.$axios.$put(`user/${this.id}`, {
+                name: this.name,
+                email: this.email,
+                password: this.current,
+                newpassword: this.newpassword
+            })
         }
     },
     mounted(){
