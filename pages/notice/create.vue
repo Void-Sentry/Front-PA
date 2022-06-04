@@ -20,7 +20,7 @@
               v-model="form.description"
               clearable
               color="blue darken-2"
-              label="Abordagem geral"
+              label="Descrição"
             ></v-text-field>
           </v-col>
           <v-col cols="12">

@@ -67,7 +67,12 @@
                item:null,
                popup:false,
                list_user:[],
-               headers: [ { text: 'Nome', value: 'name', width: '40%' }, { text: 'Email', value: 'email', width: '50%' }, { text: 'Ações', value: 'actions' }  ]
+               headers: [ 
+                    { text: 'Nome', value: 'name', width: '31%' }, 
+                    { text: 'Email', value: 'email', width: '30%' }, 
+                    { text: 'Cargos', value: 'cargo', width: '30%'},
+                    { text: 'Ações', value: 'actions' }  
+                ]
            }
        },
         methods: {
@@ -83,13 +88,17 @@
                 })
             },
             async delete_user(user){
-                await this.$axios.$delete(`user/${user.id}`)    
+                await this.$axios.$delete(`user/${user.id}`)
+                 this.index()    
+            },
+            async index(){
+                await this.$axios.$get("user/list/role").then(response=>{
+                    this.list_user=response
+                })  
             }
         },
         async mounted(){
-            await this.$axios.$get("user").then(response =>{
-                this.list_user=response
-            })
+            this.index()
             await this.$axios.$get("role").then(response =>{
                 this.listCargos=response
             })

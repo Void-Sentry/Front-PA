@@ -24,28 +24,6 @@
               </v-list-item-group>
             </v-list>
         </v-col>
-        <!-- <v-col cols="2" v-else>
-            <v-list shaped>
-              <v-subheader>Configurações</v-subheader>
-              <v-list-item-group
-                v-model="selectedItem"
-              >
-                <v-list-item
-                  v-for="(item, i) in items"
-                  :key="i"
-                  :to="item.to"
-                  @click.stop="changeViews(item.text)" 
-                >
-                  <v-list-item-icon>
-                    <v-icon v-text="item.icon"></v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.text"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-        </v-col> -->
         <v-col>
           <div v-if="profileView">
             <profile />
@@ -54,18 +32,6 @@
             <user />
           </div>
         </v-col>
-        <!-- <div v-if="userView">
-          <v-row style="width:70vw;">
-            <v-col>
-              <user />
-            </v-col>
-            <v-col class="justify-end">
-              <v-btn icon>
-                    <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </div> -->
       </v-row>
     </v-container>
   </v-card>
