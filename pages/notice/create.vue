@@ -74,7 +74,7 @@
             description: this.form.description,
             body: this.form.content,
             status_id: this.form.status,
-            user_id: this.form.user
+            user_id: this.form.user,
         }).finally(() => {
             this.snackbar = !this.snackbar
         })

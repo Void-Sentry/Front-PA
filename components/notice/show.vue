@@ -1,5 +1,5 @@
 <template>
-  <v-dialog width="1200" @input="close(dialog)" v-model="dialog" :close-on-content-click="!dialog">
+  <v-dialog @input="close(dialog)" v-model="dialog" :close-on-content-click="!dialog">
     <v-card>
       <v-card-title>
         {{ this.$props.data.title }}
@@ -10,8 +10,9 @@
       <v-card-subtitle class="text-center">
         {{ this.$props.data.description }}
       </v-card-subtitle>
-      <v-card-text class="text-justify">
-        {{ this.$props.data.body }}
+      <v-card-text>
+        <v-textarea v-model="$props.data.body">
+        </v-textarea>
       </v-card-text>
     </v-card>
   </v-dialog>
