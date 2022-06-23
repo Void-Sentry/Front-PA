@@ -31,6 +31,9 @@
           <div v-if="userView">
             <user />
           </div>
+          <div v-if="noticeView">
+            <notice />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -40,12 +43,14 @@
 <script>
   import profile from '@/components/user/profile.vue'
   import user from '@/components/user/user.vue'
+  import notice from '@/components/notice/admNotice.vue'
 
   export default {
     name: 'Gerenciamento',
     components: {
       profile,
-      user
+      user,
+      notice
     },
     data () {
       return {
@@ -53,12 +58,14 @@
         userView: false,
         profileView: false,
         estatiscaView: false,
+        noticeView: false,
         user_role: null,
         items: [
           { text: 'Perfil', icon: 'mdi-account-details' },
           { text: 'Usuários', icon: 'mdi-account-group' },
           { text: 'Estatística', icon: 'mdi-chart-bar' },
-          { text: 'Voltar', icon: 'mdi-close', to: '/' },
+          { text: 'Noticias', icon: 'mdi-playlist-check'},
+          { text: 'Voltar', icon: 'mdi-close', to: '/' }
         ],
       }  
     },
@@ -69,16 +76,25 @@
             this.profileView = !this.profileView
             this.userView = false
             this.estatiscaView = false
+            this.noticeView = false
           break
           case 'Usuários':
              this.userView = !this.userView
              this.estatiscaView = false
              this.profileView = false
+             this.noticeView = false
           break
           case 'Estatística':
              this.estatiscaView = !this.estatiscaView
              this.profileView = false
              this.userView = false 
+             this.noticeView = false
+          break
+          case 'Noticias':
+             this.noticeView = !this.noticeView
+             this.profileView = false
+             this.userView = false 
+             this.estatiscaView = false
           break
         }
       }
